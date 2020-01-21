@@ -1,11 +1,13 @@
+package systemtest;
+
 import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
+import system.Admin;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class UnitTest {
-
+public class AdminTest {
+Admin admin;
     @Test
     public void roleShouldntBeEmpty() {
         Admin admin = new Admin("admin", "admin");
