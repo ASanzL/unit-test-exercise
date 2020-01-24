@@ -15,42 +15,54 @@ public class LogIn {
      * @param password
      * @return If an account has been logged in our not
      */
-    public boolean tryToLogIn(String username, String password) {
+    public boolean tryToLogIn(String username, String password, boolean printOutput) {
         for(Account account : accounts) {
             if(account.getUsername().equals(username) &&
                     account.getPassword().equals(password)) {
                 loggedInAccount = account;
-                System.out.println("Welcome, " + loggedInAccount.getUsername());
-                printAllCommands(loggedInAccount instanceof Admin);
+                if (printOutput) {
+                    System.out.println("Welcome, " + loggedInAccount.getUsername());
+                    printAllCommands(loggedInAccount instanceof Admin);
+                }
                 return true;
             }
         }
-        System.out.println("Wrong username or password.");
+        if (printOutput) {
+            System.out.println("Wrong username or password.");
+        }
         return false;
     }
 
-    public boolean createNewAccount(Scanner scanner) {
-        String username;
-        String password;
-
-        try {
-            username = scanner.nextLine();
-        } catch (InputMismatchException e) {
-            return false;
-        }        try {
-            password = scanner.nextLine();
-        } catch (InputMismatchException e) {
-            return false;
-        }
-        if(!isUsernameOrPasswordValid(username) || !isUsernameOrPasswordValid(password)) {
-            return false;
-        }
-
-        addAccount(new User(username, password));
-        return true;
+    public boolean tryToLogIn(String username, String password) {
+        return tryToLogIn(username, password, true);
     }
 
-    private boolean isUsernameOrPasswordValid(String input) {
+    public boolean createNewAccount(User newUser) {
+        if (isUsernameOrPasswordValid(newUser.getUsername()) && isUsernameOrPasswordValid(newUser.getPassword())) {
+            addAccount(newUser);
+            return true;
+        }
+        return false;
+    }
+
+    public String enterUsername(Scanner scanner) {
+        System.out.print("Enter username: ");
+        try {
+            return scanner.next();
+        } catch (InputMismatchException e) {
+            return "error";
+        }
+    }
+    public String enterPassword(Scanner scanner) {
+        System.out.print("Enter password: ");
+        try {
+            return scanner.next();
+        } catch (InputMismatchException e) {
+            return "error";
+        }
+    }
+
+    public static boolean isUsernameOrPasswordValid(String input) {
         boolean haveLetter = false;
         boolean haveNumber = false;
 
@@ -70,7 +82,8 @@ public class LogIn {
      * @param isAdmin Output change depending on if account is admin or user
      */
     public void printAllCommands(boolean isAdmin) {
-        System.out.println("1 - View all commands\n" +
+        System.out.println("0 - Log out\n" +
+                "1 - View all commands\n" +
                 "2 - View bank balance\n" +
                 "3 - View salary\n" +
                 "4 - View role");

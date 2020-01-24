@@ -6,6 +6,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 import system.Admin;
 import system.LogIn;
+import system.User;
+
+import java.io.ByteArrayInputStream;
+import java.util.Scanner;
 
 public class LogInTest {
     LogIn logIn = new LogIn();
@@ -18,12 +22,28 @@ public class LogInTest {
 
     @Test
     public void testAddAccount() {
-        Assert.assertEquals("Number of accounts should equal 1", 2, logIn.getAccounts().size());
+        Assert.assertEquals("Number of accounts should equal 1", 1, logIn.getAccounts().size());
     }
     
     @Test
     public void testLogIn() {
         Assert.assertEquals("Should log in with correct username and password",
-                true, logIn.tryToLogIn("admin", "admin"));
+                true, logIn.tryToLogIn("admin", "admin", false));
+    }
+
+    @Test
+    public void testCreateNewAccount() {
+        Assert.assertEquals("New user should be created",
+                true, logIn.createNewAccount(new User("user1", "password1")));
+        Assert.assertEquals("New user should not be created",
+                false, logIn.createNewAccount(new User("user", "password1")));
+    }
+
+    @Test
+    public void testValidUsernameAndPassword() {
+        Assert.assertEquals("Username should be valid",
+                true, LogIn.isUsernameOrPasswordValid("username7"));
+        Assert.assertEquals("Password should not be valid",
+                false, LogIn.isUsernameOrPasswordValid("pass"));
     }
 }

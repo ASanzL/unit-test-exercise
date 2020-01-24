@@ -23,16 +23,13 @@ public class Main {
             System.out.println(failure.toString());
         }
 
-        System.out.println(result.wasSuccessful());
+        System.out.println(result.wasSuccessful() ? "Test was successful" : "Test failed");
         testDone = true;
     }
 
     public static void main(String[] args) {
         runTests();
 
-        while (!testDone) {
-            System.out.println("running");
-        }
         LogIn login = new LogIn();
         login.addAccount(new Admin("admin1", "admin1234"));
 
@@ -41,6 +38,9 @@ public class Main {
                 System.out.print("Enter a command: ");
                 int command = scanner.nextInt();
                 switch (command) {
+                    case 0:
+                        login.setLoggedInAccount(null);
+                        break;
                     case 1:
                         login.printAllCommands(login.getLoggedInAccount() instanceof Admin);
                         break;
@@ -63,7 +63,15 @@ public class Main {
                         break;
                     case 8:
                         if(login.getLoggedInAccount() instanceof Admin) {
-
+                            String username = "";
+                            String password;
+                            do {
+                                username = login.enterUsername(scanner);
+                            } while (!LogIn.isUsernameOrPasswordValid(username));
+                            do {
+                                password = login.enterPassword(scanner);
+                            } while (!LogIn.isUsernameOrPasswordValid(password));
+                            login.createNewAccount(new User(username, password));
                         }
                         break;
                 }
@@ -71,9 +79,9 @@ public class Main {
             } else {
                 System.out.println("Please log in.");
                 System.out.print("Enter username: ");
-                String username = scanner.nextLine();
+                String username = scanner.next();
                 System.out.print("Enter password: ");
-                String password = scanner.nextLine();
+                String password = scanner.next();
                 System.out.println("");
 
                 login.tryToLogIn(username, password);
