@@ -1,4 +1,5 @@
-.idea/*
-pom.xml
+.idea/
+
 *.iml
+
 target/*
