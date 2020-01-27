@@ -37,11 +37,45 @@ public class LogIn {
         return tryToLogIn(username, password, true);
     }
 
+    /**
+     * Adds a new account
+     * @param newUser
+     * @return If a new account has been created
+     */
     public boolean createNewAccount(User newUser) {
         if (isUsernameOrPasswordValid(newUser.getUsername()) && isUsernameOrPasswordValid(newUser.getPassword())) {
             addAccount(newUser);
             return true;
         }
+        return false;
+    }
+
+    public boolean removeAccount(User userToRemove) {
+        for (Account user : accounts) {
+            if (user instanceof User) {
+                if (user.getUsername().equals(userToRemove.getUsername())
+                && user.getPassword().equals(userToRemove.getPassword())) {
+                    accounts.remove(user);
+                    System.out.println("Account has been removed");
+                    return true;
+                }
+            }
+        }
+        System.out.println("No user matched the username and password combination");
+        return false;
+    }
+
+    public boolean removeLoggedInAccount(User userToRemove) {
+        if (loggedInAccount instanceof User) {
+            if (userToRemove.getUsername().equals(loggedInAccount.getUsername())
+            && userToRemove.getPassword().equals(loggedInAccount.getPassword())) {
+                accounts.remove(loggedInAccount);
+                loggedInAccount = null;
+                System.out.println("Account has been removed");
+                return true;
+            }
+        }
+        System.out.println("Wrong username or password.");
         return false;
     }
 
@@ -95,7 +129,7 @@ public class LogIn {
                 "9 - Remove account"
                 :
                 "5 - Request change of role or salary\n" +
-                        "6 - Delete your account");
+                "6 - Delete your account");
     }
 
     public ArrayList<Account> getAccounts() {

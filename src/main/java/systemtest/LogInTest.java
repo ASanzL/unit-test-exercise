@@ -46,4 +46,15 @@ public class LogInTest {
         Assert.assertEquals("Password should not be valid",
                 false, LogIn.isUsernameOrPasswordValid("pass"));
     }
+
+    @Test
+    public void testRemoveUser() {
+        Assert.assertEquals("Wrong username and password should not remove a user",
+                false, logIn.removeAccount(new User("wronguser", "wrongpass")));
+
+        Assert.assertEquals("New user should be created",
+                true, logIn.createNewAccount(new User("user5", "password5")));
+        Assert.assertEquals("Correct username and password should remove a user",
+                true, logIn.removeAccount(new User("user5", "password5")));
+    }
 }

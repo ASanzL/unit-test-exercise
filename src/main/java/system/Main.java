@@ -11,7 +11,6 @@ import java.util.Scanner;
 
 public class Main {
     public static Scanner scanner = new Scanner(System.in);
-    static boolean testDone = false;
 
     public static void runTests() {
         Result result = JUnitCore.runClasses(
@@ -24,7 +23,7 @@ public class Main {
         }
 
         System.out.println(result.wasSuccessful() ? "Test was successful" : "Test failed");
-        testDone = true;
+        System.out.println();
     }
 
     public static void main(String[] args) {
@@ -40,19 +39,19 @@ public class Main {
                 switch (command) {
                     case 0:
                         login.setLoggedInAccount(null);
-                        break;
+                    break;
                     case 1:
                         login.printAllCommands(login.getLoggedInAccount() instanceof Admin);
-                        break;
+                    break;
                     case 2:
                         System.out.println("Your balance is: " + login.getLoggedInAccount().getBalance());
-                        break;
+                    break;
                     case 3:
                         System.out.println("Your salary is: " + login.getLoggedInAccount().getSalary());
-                        break;
+                    break;
                     case 4:
                         System.out.println("You role is : " + login.getLoggedInAccount().getRole());
-                        break;
+                    break;
                     case 5:
                         if(login.getLoggedInAccount() instanceof Admin) {
                             System.out.println("Username\tPassword");
@@ -60,22 +59,25 @@ public class Main {
                                 System.out.println(account.getUsername() + "\t\t" + account.getPassword());
                             }
                         }
-                        break;
+                    case 6:
+                        if(login.getLoggedInAccount() instanceof Admin) {
+
+                        } else {
+                            login.removeLoggedInAccount(inputUsernameAndPassword(login));
+                        }
+                    break;
                     case 8:
                         if(login.getLoggedInAccount() instanceof Admin) {
-                            String username = "";
-                            String password;
-                            do {
-                                username = login.enterUsername(scanner);
-                            } while (!LogIn.isUsernameOrPasswordValid(username));
-                            do {
-                                password = login.enterPassword(scanner);
-                            } while (!LogIn.isUsernameOrPasswordValid(password));
-                            login.createNewAccount(new User(username, password));
+                            login.createNewAccount(inputUsernameAndPassword(login));
                         }
-                        break;
+                    break;
+                    case 9:
+                        if(login.getLoggedInAccount() instanceof  Admin) {
+                            login.removeAccount(inputUsernameAndPassword(login));
+                        }
+                    break;
                 }
-                System.out.println("");
+                System.out.println();
             } else {
                 System.out.println("Please log in.");
                 System.out.print("Enter username: ");
@@ -87,5 +89,17 @@ public class Main {
                 login.tryToLogIn(username, password);
             }
         }
+    }
+
+    public static User inputUsernameAndPassword(LogIn login) {
+        String username;
+        String password;
+        do {
+            username = login.enterUsername(scanner);
+        } while (!LogIn.isUsernameOrPasswordValid(username));
+        do {
+            password = login.enterPassword(scanner);
+        } while (!LogIn.isUsernameOrPasswordValid(password));
+        return new User(username, password);
     }
 }
