@@ -9,4 +9,9 @@ public class Admin extends Account {
     public String getRole() {
         return "Adminstrator";
     }
+
+    @Override
+    public int getSalary() {
+        return 50000;
+    }
 }

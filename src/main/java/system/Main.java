@@ -7,6 +7,7 @@ import systemtest.AdminTest;
 import systemtest.LogInTest;
 import systemtest.UserTest;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -15,7 +16,8 @@ public class Main {
     public static void runTests() {
         Result result = JUnitCore.runClasses(
                 AdminTest.class,
-                LogInTest.class
+                LogInTest.class,
+                UserTest.class
         );
 
         for(Failure failure : result.getFailures()) {
@@ -58,12 +60,27 @@ public class Main {
                             for (Account account : login.getAccounts()) {
                                 System.out.println(account.getUsername() + "\t\t" + account.getPassword());
                             }
+                        } else {
+                            System.out.print("Enter requested salary: ");
+                            try {
+                                int newSalary = scanner.nextInt();
+                                ((User) login.getLoggedInAccount()).setRequestedSalary(newSalary);
+                            } catch (InputMismatchException e) {
+                                System.out.println("Enter a number");
+                                scanner.next();
+                            }
                         }
+                    break;
                     case 6:
                         if(login.getLoggedInAccount() instanceof Admin) {
-
+                            login.reviewSalaryRequests(scanner);
                         } else {
                             login.removeLoggedInAccount(inputUsernameAndPassword(login));
+                        }
+                    break;
+                    case 7:
+                        if(login.getLoggedInAccount() instanceof Admin) {
+                            login.advanceTime();
                         }
                     break;
                     case 8:

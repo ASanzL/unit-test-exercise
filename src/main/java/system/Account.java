@@ -4,12 +4,16 @@ public abstract class Account {
     private String username;
     private String password;
     private int balance;
-    private int salary;
+    private int salary = 30000;
     private String role;
 
     public Account(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public void addToBalance(int moneyToAdd) {
+        balance += moneyToAdd;
     }
 
     public String getUsername() {

@@ -87,6 +87,14 @@ public class LogIn {
             return "error";
         }
     }
+
+    public void advanceTime() {
+        for (Account account : accounts) {
+            account.addToBalance(account.getSalary());
+        }
+        System.out.println("Salary has been added to all accounts.");
+    }
+
     public String enterPassword(Scanner scanner) {
         System.out.print("Enter password: ");
         try {
@@ -111,6 +119,25 @@ public class LogIn {
         return (haveLetter && haveNumber);
     }
 
+    public void reviewSalaryRequests(Scanner scanner) {
+        for (Account account : accounts) {
+            if (account instanceof User) {
+                User user = (User)account;
+                if (user.getRequestedSalary() != user.getSalary()) {
+                    System.out.println(user.getUsername() +
+                            "has requested a new salary: " + user.getRequestedSalary() + "\nEnter 'y' to accept");
+                    char[] answer = scanner.next().toCharArray();
+                    if (answer[0] == 'y') {
+                        user.setSalary(user.getRequestedSalary());
+                        System.out.println("Request accepted");
+                    } else {
+                        System.out.println("Request denied");
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Prints all commands an account can use
      * @param isAdmin Output change depending on if account is admin or user
@@ -123,8 +150,8 @@ public class LogIn {
                 "4 - View role");
         System.out.println(isAdmin ?
                 "5 - View all accounts\n" +
-                "6 - \n" +
-                "7 - \n" +
+                "6 - View requests\n" +
+                "7 - Pay salaries\n" +
                 "8 - Add new account\n" +
                 "9 - Remove account"
                 :
