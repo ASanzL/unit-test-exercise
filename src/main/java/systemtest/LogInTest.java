@@ -21,6 +21,20 @@ public class LogInTest {
     }
 
     @Test
+    public void integrationTestLogIn1() {
+        testCreateNewAccount();
+        testLogIn();
+        testValidUsernameAndPassword();
+        testRemoveUser();
+    }
+
+    @Test
+    public void smokeTestLogIn1() {
+        testCreateNewAccount();
+        testLogIn();
+    }
+
+    @Test
     public void testAddAccount() {
         Assert.assertEquals("Number of accounts should equal 1", 1, logIn.getAccounts().size());
     }

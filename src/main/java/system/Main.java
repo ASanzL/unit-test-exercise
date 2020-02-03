@@ -37,7 +37,13 @@ public class Main {
         while (true) {
             if(login.getLoggedInAccount() != null) {
                 System.out.print("Enter a command: ");
-                int command = scanner.nextInt();
+                int command = -1;
+                try {
+                    command = scanner.nextInt();
+                } catch (InputMismatchException e) {
+                    System.out.println("Write a number");
+                    scanner.next();
+                }
                 switch (command) {
                     case 0:
                         login.setLoggedInAccount(null);
@@ -101,7 +107,7 @@ public class Main {
                 String username = scanner.next();
                 System.out.print("Enter password: ");
                 String password = scanner.next();
-                System.out.println("");
+                System.out.println();
 
                 login.tryToLogIn(username, password);
             }
